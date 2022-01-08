@@ -1,77 +1,131 @@
-const { pool } = require("../config/db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv").config();
-const fs = require("fs");
+const _ = require("lodash");
+const models = require("../models/user.models");
 
 exports.signup = (req, res, next) => {
-    let sql = `SELECT * FROM user WHERE email=?`;
-    pool.execute(sql, [req.body.email], function (err, result) {
-        let user = result[0];
-        if (!user) {
-            bcrypt
-                .hash(req.body.password, 10)
-                .then((hash) => {
-                    const image = `${req.protocol}://${req.get(
-                        "host"
-                    )}/images/profile/pp.png`;
-                    const user = {
-                        nom: req.body.nom,
-                        prenom: req.body.prenom,
-                        email: req.body.email,
-                        password: hash,
-                        imageUrl: image,
-                    };
-                    let sql = `INSERT INTO user (nom, prenom, email, password, pp) VALUES (?,?,?,?,?)`;
-                    pool.execute(
-                        sql,
-                        [
-                            user.nom,
-                            user.prenom,
-                            user.email,
-                            user.password,
-                            user.imageUrl,
-                        ],
-                        function (err, result) {
-                            if (err) throw err;
-                            res.status(201).json({
-                                message: `Utilisateur ${user.prenom} ajouté`,
+    //Paramètres
+    const email = req.body.email.trim();
+    const username = req.body.username;
+    const password = req.body.password;
+    const bio = req.body.bio;
+    const avatar = req.body.avatar;
+
+    //Regex email et password
+    const regexEmail = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,3}$/;
+    const regexPassword = /^(?=.*\d).{4,}$/;
+
+    if (_.isEmpty(email) || _.isEmpty(password) || _.isEmpty(username)) {
+        return res
+            .status(200)
+            .json({ error: "Merci de remplir le(s) champ(s) manquant(s) !" });
+    }
+
+    if (username.length < 3) {
+        return res.status(200).json({
+            error: "Merci de saisir un nom d'utilisateur d'au moisn trois caractères !",
+        });
+    }
+
+    if (!regexEmail.test(email)) {
+        return res
+            .status(200)
+            .json({ error: "Merci de saisir un email valide !" });
+    }
+    if (!regexPassword.test(password)) {
+        return res.status(200).json({
+            error: "Merci de saisir un mot de passe d'au moins quatre caractères dont au moins un chiffre",
+        });
+    }
+
+    models.User.findOne({
+        attributes: ["email"],
+        where: { email: email },
+    })
+        .then(function (userFound) {
+            if (!userFound) {
+                models.User.findOne({
+                    attributes: ["username"],
+                    where: { username: username },
+                })
+                    .then(function (userFound) {
+                        if (userFound) {
+                            return res.status(200).json({
+                                error: "Ce nom est déjà utilisé, merci d'en choisir un autre",
+                            });
+                        } else {
+                            bcrypt.hash(password, 10).then((hash) => {
+                                const user = models.User.create({
+                                    email: email,
+                                    username: username,
+                                    password: hash,
+                                    bio: bio,
+                                })
+                                    .then((user) => {
+                                        res.status(201).json({
+                                            message: "Utilisateur créé !",
+                                        });
+                                    })
+                                    .catch((error) =>
+                                        res.status(400).json({ error })
+                                    );
                             });
                         }
-                    );
-                })
-                .catch((error) => res.status(500).json({ error }));
-        } else {
-            res.status(401).json({ message: "Email déja pris" });
-        }
-    });
+                    })
+
+                    .catch((error) => {
+                        res.status(500).json({ error });
+                    });
+            } else {
+                return res.status(200).json({
+                    error: "Cette adresse email est déjà utilisée",
+                });
+            }
+        })
+        .catch(function (err) {
+            return res.status(500).json({
+                error: "Impossible de verifier s'il l'utilisateur existe deja !",
+            });
+        });
 };
 
 exports.login = (req, res, next) => {
-    let sql = `SELECT * FROM user WHERE email=?`;
-    pool.execute(sql, [req.body.email], function (err, result) {
-        let user = result[0];
-        if (!user) return res.status(401).json({ error: "Email incorrect" });
-        bcrypt
-            .compare(req.body.password, user.password)
-            .then((valid) => {
-                if (!valid) {
-                    return res
-                        .status(401)
-                        .json({ error: " Mot de passe incorrect !" });
-                }
-                console.log("utilisateur connecté");
-                res.status(200).json({
-                    userId: user.id,
-                    token: jwt.sign(
-                        { userId: user.id },
-                        process.env.SECRET_TOKEN_KEY,
-                        { expiresIn: "24h" }
-                    ),
+    //Params
+    const email = req.body.email;
+    const password = req.body.password;
+
+    if (email == null || password == null) {
+        return res
+            .status(400)
+            .json({ error: "Merci de remplir tout les champs" });
+    }
+
+    models.User.findOne({
+        where: { email: email },
+    })
+        .then((user) => {
+            if (!user) {
+                return res.status(200).json({
+                    error: "Utilisateur non trouvé ! Veuillez vous inscrire ! ",
                 });
-            })
-            .catch((error) =>
-                res.status(500).json({ message: "Erreur authentification" })
-            );
-    });
+            }
+            bcrypt
+                .compare(password, user.password)
+                .then((valid) => {
+                    if (!valid) {
+                        return res
+                            .status(200)
+                            .json({ error: " Mot de passe incorrect ! " });
+                    }
+                    res.status(200).json({
+                        username: user.username,
+                        userId: user.id,
+                        token: jwt.sign({ userId: user.id }, "APP_TOKEN", {
+                            expiresIn: "24h",
+                        }),
+                    });
+                })
+                .catch((error) => res.status(500).json({ error }));
+        })
+        .catch((error) => res.status(500).json({ error }));
 };
