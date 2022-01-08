@@ -39,6 +39,10 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 defaultValue: false,
             },
+            bio: {
+                type: DataTypes.TEXT,
+                defaultValue: false,
+            },
             admin: {
                 type: DataTypes.BOOLEAN,
                 allowNull: false,

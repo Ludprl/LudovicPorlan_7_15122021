@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
                     key: "id",
                 },
             },
-            content: DataTypes.STRING,
+            content: DataTypes.TEXT,
             imagePost: DataTypes.STRING,
             likes: DataTypes.INTEGER,
         },
