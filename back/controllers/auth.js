@@ -3,17 +3,7 @@ const jwt = require("jsonwebtoken");
 const db = require("../models");
 const emailValidator = require("email-validator");
 const passwordValidator = require("../middlewares/passwordValidator");
-const CryptoJS = require("crypto-js"); //on utilise le package cryptojs pour hash l'email
 require("dotenv").config();
-
-//Clés CryptoJS
-const key = CryptoJS.enc.Utf8.parse(process.env.email_SecretKey);
-const iv = CryptoJS.enc.Utf8.parse(process.env.email_SecretKey2);
-
-function encryptEmail(string) {
-    const enc = CryptoJS.AES.encrypt(string, key, { iv: iv });
-    return enc;
-}
 
 //création d'un nouvel utilisateur
 exports.signup = (req, res, next) => {
@@ -22,10 +12,6 @@ exports.signup = (req, res, next) => {
     const firstName = req.body.firstName;
     const email = req.body.email;
     const password = req.body.password;
-    const encryptedEmail = encryptEmail(email).toString();
-    const decryptedEmail = CryptoJS.AES.decrypt(encryptedEmail, key, {
-        iv: iv,
-    }).toString(CryptoJS.enc.Utf8);
 
     if (
         lastName == null ||
@@ -69,7 +55,7 @@ exports.signup = (req, res, next) => {
         where: {
             lastName: lastName,
             firstName: firstName,
-            email: decryptedEmail,
+            email: email,
         },
     })
         .then((userExist) => {
@@ -80,7 +66,7 @@ exports.signup = (req, res, next) => {
                         const user = db.User.build({
                             lastName: req.body.lastName,
                             firstName: req.body.firstName,
-                            email: encryptedEmail,
+                            email: req.body.email,
                             password: hash, //on récupère le mdp hashé de bcrypt
                             admin: 0,
                         });
@@ -118,7 +104,7 @@ exports.signup = (req, res, next) => {
 //connection d'un utilisateur
 exports.login = (req, res, next) => {
     db.User.findOne({
-        where: { email: encryptEmail(req.body.email).toString() },
+        where: { email: req.body.email },
     })
         .then((user) => {
             if (user) {
