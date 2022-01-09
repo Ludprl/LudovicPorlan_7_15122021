@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
+import { UidContext } from "../components/AppContext";
 import Login from "../components/Login";
 
 const Profil = () => {
+    const Uid = useContext(UidContext);
     return (
         <div>
             <div className="profil-page">
-                <div className="log-container"></div>
-                <Login />
                 <div className="img-container">
-                    <img src=".img/logo.svg" alt="Groupomania"></img>
+                    <img
+                        src="./img/logo/icon-above-font.svg"
+                        alt="Groupomania"
+                    />
+                </div>
+                <div className="log-container">
+                    <Login />
                 </div>
             </div>
         </div>

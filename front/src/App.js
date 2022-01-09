@@ -1,11 +1,30 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Routes from "./components/Routes";
+import { UidContext } from "./components/AppContext";
+import Cookies from "js-cookie";
+import { isExpired, decodeToken } from "react-jwt";
 
 const App = () => {
+    const [Uid, setUid] = useState(null);
+
+    useEffect(() => {
+        const jwtUid = localStorage.getItem("userToken");
+        console.log(jwtUid);
+        if (jwtUid !== null) {
+            const myDecodedToken = decodeToken(jwtUid);
+            const isMyTokenExpired = isExpired(jwtUid);
+            console.log(myDecodedToken);
+            console.log(isMyTokenExpired);
+            setUid(myDecodedToken.userId);
+        }
+
+        console.log("userId = " + Uid);
+    }, [Uid]);
+
     return (
-        <div>
+        <UidContext.Provider value={Uid}>
             <Routes />
-        </div>
+        </UidContext.Provider>
     );
 };
 
