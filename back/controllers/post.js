@@ -37,7 +37,7 @@ exports.createPost = (req, res, next) => {
                 });
                 post.save()
                     .then(() =>
-                        res.status(200).json({
+                        res.status(201).json({
                             message: "Votre message a été créé avec succès !",
                         })
                     )

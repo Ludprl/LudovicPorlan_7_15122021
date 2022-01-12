@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Routes from "./components/Routes";
 import { UidContext } from "./components/AppContext";
-import Cookies from "js-cookie";
 import { isExpired, decodeToken } from "react-jwt";
 
 const App = () => {
