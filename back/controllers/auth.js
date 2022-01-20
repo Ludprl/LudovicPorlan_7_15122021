@@ -132,7 +132,7 @@ exports.login = (req, res, next) => {
                     })
                     .catch((error) =>
                         res.status(500).json({
-                            error: "Une erreur s'est produite pendant la connexion, veuillez recommencer ultérieurement.",
+                            error: "Une erreur s'est produite pendant la connexion.",
                         })
                     );
             } else {

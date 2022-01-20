@@ -10,17 +10,16 @@ import rootReducer from "./reducers";
 
 //Dev Tools
 import { composeWithDevTools } from "redux-devtools-extension";
-import logger from "redux-logger";
 
 // Creation du store
 const store = createStore(
     rootReducer,
-    composeWithDevTools(applyMiddleware(thunk, logger))
+    composeWithDevTools(applyMiddleware(thunk))
 );
 
 ReactDOM.render(
     <Provider store={store}>
-        <App />,
+        <App />
     </Provider>,
     document.getElementById("root")
 );

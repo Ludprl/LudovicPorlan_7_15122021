@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from "react";
 import Routes from "./components/Routes";
 import { UidContext } from "./components/AppContext";
-import { isExpired, decodeToken } from "react-jwt";
+import { decodeToken } from "react-jwt";
+import { useDispatch } from "react-redux";
+import { getUser } from "./actions/user.actions";
 
 const App = () => {
     const [Uid, setUid] = useState(null);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const jwtUid = localStorage.getItem("userToken");
-        console.log(jwtUid);
         if (jwtUid !== null) {
             const myDecodedToken = decodeToken(jwtUid);
-            const isMyTokenExpired = isExpired(jwtUid);
-            console.log(myDecodedToken);
-            console.log(isMyTokenExpired);
             setUid(myDecodedToken.userId);
         }
-
-        console.log("userId = " + Uid);
+        if (Uid) {
+            dispatch(getUser(Uid));
+        }
     }, [Uid]);
 
     return (

@@ -31,6 +31,7 @@ module.exports = {
             },
             bio: {
                 type: Sequelize.TEXT,
+                defaultValue: null,
             },
             admin: {
                 allowNull: false,

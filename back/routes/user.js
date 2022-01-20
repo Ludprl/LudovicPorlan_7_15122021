@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const userCtrl = require("../controllers/user");
 const auth = require("../middlewares/auth");
-const multer = require("../middlewares/multer");
+const multer = require("../middlewares/multerUser");
 
 router.get("/:id", auth, userCtrl.getUserProfile);
 router.put("/:id", auth, multer, userCtrl.modifyUserProfile);

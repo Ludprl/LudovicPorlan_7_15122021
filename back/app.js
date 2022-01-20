@@ -24,6 +24,10 @@ app.use(express.json());
 
 //gestion des images de façon statique
 app.use("/images", express.static(path.join(__dirname, "images")));
+app.use(
+    "/images/avatars",
+    express.static(path.join(__dirname, "imagesAvatars"))
+);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);

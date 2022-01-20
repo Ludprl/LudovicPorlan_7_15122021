@@ -1,0 +1,27 @@
+.profil-page {
+    font-family: Programme-light;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    max-width: 980px;
+    flex-direction: column;
+}
+.profil-container {
+    max-width: 980px;
+    display: flex;
+}
+.left-part,
+.right-part {
+    width: 50%;
+    max-width: 50%;
+}
+.left-part {
+    display: flex;
+    flex-direction: column;
+}
+.left-part img {
+    max-width: 150px;
+}
+.bio-update {
+    background-color: grey;
+}

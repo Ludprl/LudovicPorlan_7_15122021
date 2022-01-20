@@ -3,8 +3,10 @@ import { NavLink } from "react-router-dom";
 import "./Navbar.css";
 import logoIcon from "./../../assets/logo/icon-left-font-monochrome-white.svg";
 import Logout from "../Login/Logout";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
+    const userData = useSelector((state) => state.userReducer);
     return (
         <nav>
             <div className="nav-container">
@@ -18,8 +20,10 @@ const Navbar = () => {
                 <ul>
                     <li>
                         <h5>
-                            Bienvenu{" "}
-                            <NavLink to="/profil">'valeur dynamique'</NavLink>
+                            Bienvenue{" "}
+                            <NavLink to="/profil">
+                                {userData.lastName} {userData.firstName}
+                            </NavLink>
                         </h5>
                     </li>
                     <li>

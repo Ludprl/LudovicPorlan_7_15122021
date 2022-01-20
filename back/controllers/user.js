@@ -1,11 +1,6 @@
 const jwt = require("jsonwebtoken");
 const db = require("../models");
-const CryptoJS = require("crypto-js"); //on utilise le package cryptojs pour hash l'email
-require("dotenv").config();
-
-//Clés CryptoJS
-const key = CryptoJS.enc.Utf8.parse(process.env.email_SecretKey);
-const iv = CryptoJS.enc.Utf8.parse(process.env.email_SecretKey2);
+const fs = require("fs");
 
 //Avoir les informations d'un compte
 exports.getUserProfile = (req, res, next) => {
@@ -15,19 +10,17 @@ exports.getUserProfile = (req, res, next) => {
             "id",
             "lastName",
             "firstName",
+            "bio",
             "email",
             "admin",
             "profileAvatar",
             "createdAt",
+            "updatedAt",
         ],
         where: { id: id },
     })
         .then((user) => {
             if (user) {
-                const decryptedEmail = CryptoJS.AES.decrypt(user.email, key, {
-                    iv: iv,
-                }).toString(CryptoJS.enc.Utf8);
-                user.email = decryptedEmail;
                 res.status(200).json(user);
             } else {
                 res.status(401).json({ error: "Utilisateur inconnu !" });
@@ -42,47 +35,71 @@ exports.getUserProfile = (req, res, next) => {
 
 //Modification d'un compte
 exports.modifyUserProfile = (req, res, next) => {
-    const decodedToken = jwt.decode(
-        req.headers.authorization.split(" ")[1],
-        process.env.JWT_TOKEN
-    );
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_TOKEN);
     const userId = decodedToken.userId;
-    req.body.user = userId;
-    console.log("bodyUser", req.body.user);
-    const userObject = req.file
-        ? {
-              ...JSON.parse(req.body.user),
-              profileAvatar: `${req.protocol}://${req.get(
-                  "host"
-              )}/images/upload/avatars/${req.file.filename}`,
-          }
-        : { ...req.body };
+    // recherche de l'utilisateur avec son userId
     db.User.findOne({
         where: { id: userId },
     })
         .then((userFound) => {
-            if (userFound) {
-                db.User.update(userObject, {
-                    where: { id: userId },
-                })
-                    .then((user) =>
+            // On vérifie que l'utilisateur est bien propriétaire du compte
+            if (userFound.id === userId) {
+                if (req.body.admin) {
+                    return res.status(401).json({
+                        error: "Vous n'avez pas l'autorisation d'effectuer cette action.",
+                    });
+                }
+                if (req.file) {
+                    const oldFile = userFound.profileAvatar.split(
+                        "/images/upload/avatars/"
+                    )[1];
+                    const userObject = req.file
+                        ? {
+                              ...JSON.parse(userId),
+                              profileAvatar: `${req.protocol}://${req.get(
+                                  "host"
+                              )}/images/upload/avatars/${req.file.filename}`, //on modifie l'image URL
+                          }
+                        : { ...req.body };
+                    //on supprime l'ancienne image
+                    fs.unlinkSync(`images/upload/avatars/${oldFile}`);
+                    db.User.update(userObject, {
+                        //on modifie le compte dans la db
+                        where: { id: userId },
+                    })
+                        .then(() =>
+                            res.status(200).json({
+                                message:
+                                    "Votre photo de profil a été modifiée avec succès !",
+                            })
+                        )
+                        .catch(() =>
+                            res.status(400).json({
+                                error: "Une erreur s'est produite pendant la modification du profil, veuillez recommencer ultérieurement.",
+                            })
+                        );
+                } else {
+                    const userObject = req.body;
+                    db.User.update(userObject, {
+                        where: { id: userId },
+                    }).then(() =>
                         res.status(200).json({
                             message: "Votre profil a été modifié avec succès !",
                         })
-                    )
-                    .catch((error) =>
-                        res.status(400).json({
-                            error: "Une erreur s'est produite pendant la modification du profil, veuillez recommencer ultérieurement.",
-                        })
                     );
+                }
             } else {
                 res.status(401).json({ error: "Utilisateur inconnu !" });
             }
         })
-        .catch((error) =>
-            res.status(500).json({
-                error: "Une erreur s'est produite, veuillez recommencer ultérieurement.",
-            })
+        .catch(
+            (error) => (
+                res.status(500).json({
+                    error: "Une erreur s'est produite, veuillez recommencer ultérieurement.",
+                }),
+                console.log(error)
+            )
         );
 };
 
