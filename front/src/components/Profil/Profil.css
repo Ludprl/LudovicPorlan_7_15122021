@@ -3,25 +3,85 @@
     margin: auto;
     display: flex;
     justify-content: center;
-    max-width: 980px;
+    max-width: 580px;
     flex-direction: column;
 }
-.profil-container {
-    max-width: 980px;
-    display: flex;
+.right-part p {
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
-.left-part,
-.right-part {
-    width: 50%;
+.profil-page h1 {
+    text-align: center;
+}
+.profil-container {
+    max-width: 580px;
+    padding: 15px;
+    border: 1px solid #fe7b0d;
+    border-radius: 15px;
+    display: flex;
+    margin-bottom: 25px;
+}
+.right-part button,
+.send-upload {
+    cursor: pointer;
+    color: white;
+    height: 35px;
+    border: solid 1px black;
+    border-radius: 15px;
+    background-color: #ff7e0d;
     max-width: 50%;
 }
 .left-part {
     display: flex;
+    width: 100%;
+    align-items: center;
     flex-direction: column;
 }
+.left-part form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.left-part form label,
+.left-part form input {
+    text-align: center;
+    margin-top: 15px;
+    width: 50%;
+}
+
+.left-part h3 {
+    margin-top: 0;
+}
 .left-part img {
-    max-width: 150px;
+    height: 250px;
+    width: 250px;
+    clip-path: ellipse(50% 50%);
+}
+#file {
+    width: 100%;
 }
 .bio-update {
-    background-color: grey;
+    border: 1px solid #fe7b0d;
+    border-radius: 15px;
+    background-color: ;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 25px;
+}
+.bio-update h3 {
+    text-align: center;
+    margin-top: 0;
+}
+.bio-update button {
+    width: 50%;
+    max-width: 200px;
+    margin-top: 15px;
+}
+.bio-update textarea,
+p {
+    width: 80%;
 }

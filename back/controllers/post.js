@@ -63,11 +63,10 @@ exports.getAllPosts = (req, res, next) => {
         order: [["createdAt", "DESC"]],
         include: [
             {
-                model: db.User,
-                attributes: ["lastName", "firstName", "profileAvatar"],
+                model: db.Comment,
             },
             {
-                model: db.Comment,
+                model: db.Like,
             },
         ],
     })

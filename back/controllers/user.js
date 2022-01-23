@@ -2,6 +2,26 @@ const jwt = require("jsonwebtoken");
 const db = require("../models");
 const fs = require("fs");
 
+//récupérer tout les comptes utilisateur
+exports.getAllUsers = (req, res, next) => {
+    db.User.findAll({
+        attributes: { exclude: ["password"] },
+        order: [["createdAt", "DESC"]],
+    })
+        .then((usersFound) => {
+            if (usersFound) {
+                res.status(200).json(usersFound);
+            } else {
+                res.status(401).json({ error: "Aucun utilisateur trouvé !" });
+            }
+        })
+        .catch((error) =>
+            res.status(500).json({
+                error: "Une erreur s'est produite pendant le chargement des utilisateurs",
+            })
+        );
+};
+
 //Avoir les informations d'un compte
 exports.getUserProfile = (req, res, next) => {
     const id = req.params.id;

@@ -11,10 +11,9 @@ exports.getAllLike = (req, res, next) => {
             attributes: ["lastName", "firstName"],
         },
     })
-        .then((likePostFound) => {
-            if (likePostFound) {
-                res.status(200).json(likePostFound);
-                console.log(likePostFound);
+        .then((likesPostFound) => {
+            if (likesPostFound) {
+                res.status(200).json(likesPostFound);
             } else {
                 res.status(404).json({ error: "Aucun j'aime trouvé !" });
             }
@@ -25,18 +24,19 @@ exports.getAllLike = (req, res, next) => {
             })
         );
 };
-
-//Like d'un message
+//aimer un message
 exports.likePost = (req, res, next) => {
-    const token = req.headers.authorization.split(" ")[1];
-    const decodedToken = jwt.verify(token, process.env.JWT_TOKEN);
+    const decodedToken = jwt.decode(
+        req.headers.authorization.split(" ")[1],
+        process.env.JWT_TOKEN
+    );
     const userId = decodedToken.userId;
     const isliked = req.body.like;
     db.Post.findOne({
         where: { id: req.params.postId },
     })
-        .then((postfound) => {
-            if (!postfound) {
+        .then((postFound) => {
+            if (!postFound) {
                 return res
                     .status(401)
                     .json({ error: "Aucun message trouvé !" });
@@ -46,11 +46,11 @@ exports.likePost = (req, res, next) => {
                     userId: userId,
                 })
                     .then((response) => {
-                        console.log(postfound.likes);
+                        console.log(postFound.likes);
 
                         db.Post.update(
                             {
-                                likes: postfound.likes + 1,
+                                likes: postFound.likes + 1,
                             },
                             {
                                 where: { id: req.params.postId },
@@ -58,7 +58,8 @@ exports.likePost = (req, res, next) => {
                         )
                             .then(() =>
                                 res.status(201).json({
-                                    message: "Votre j'aime a été ajouté !",
+                                    message:
+                                        "Votre j'aime a été ajouté avec succès !",
                                 })
                             )
                             .catch((error) =>
@@ -82,7 +83,7 @@ exports.likePost = (req, res, next) => {
                     .then(() => {
                         db.Post.update(
                             {
-                                likes: postfound.likes - 1,
+                                likes: postFound.likes - 1,
                             },
                             {
                                 where: { id: req.params.postId },

@@ -21,7 +21,6 @@ module.exports = (sequelize, DataTypes) => {
             },
             content: DataTypes.TEXT,
             imagePost: DataTypes.STRING,
-            likes: DataTypes.INTEGER,
         },
         {
             sequelize,
