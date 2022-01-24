@@ -74,6 +74,7 @@ exports.modifyUserProfile = (req, res, next) => {
                     const oldFile = userFound.profileAvatar.split(
                         "/images/upload/avatars/"
                     )[1];
+                    console.log("COUCOU" + oldFile);
                     const userObject = req.file
                         ? {
                               ...JSON.parse(userId),
@@ -82,8 +83,10 @@ exports.modifyUserProfile = (req, res, next) => {
                               )}/images/upload/avatars/${req.file.filename}`, //on modifie l'image URL
                           }
                         : { ...req.body };
-                    //on supprime l'ancienne image
-                    fs.unlinkSync(`images/upload/avatars/${oldFile}`);
+                    //on supprime l'ancienne image seulement si elle existe
+                    if (oldFile !== undefined) {
+                        fs.unlinkSync(`images/upload/avatars/${oldFile}`);
+                    }
                     db.User.update(userObject, {
                         //on modifie le compte dans la db
                         where: { id: userId },

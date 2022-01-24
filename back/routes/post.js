@@ -10,6 +10,7 @@ router.get("", auth, postCtrl.getAllPosts);
 router.put("/:postId", auth, multerP, postCtrl.modifyPost);
 router.delete("/:postId", auth, postCtrl.deletePost);
 router.post("/:postId/like", auth, likeCtrl.likePost);
-router.get("/:postId/like", auth, likeCtrl.getAllLike);
+router.get("/:postId/like", auth, likeCtrl.getPostLikes);
+router.get("/likes", auth, likeCtrl.getAllLikes);
 
 module.exports = router;

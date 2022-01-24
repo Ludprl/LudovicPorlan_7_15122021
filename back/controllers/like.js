@@ -1,9 +1,28 @@
 const jwt = require("jsonwebtoken");
 const db = require("../models");
 require("dotenv").config();
+// récupérer tout les likes
+//Affichage tous les messages
+exports.getAllLikes = (req, res, next) => {
+    db.Like.findAll({
+        order: [["createdAt", "DESC"]],
+    })
+        .then((likesFound) => {
+            if (likesFound) {
+                res.status(200).json(likesFound);
+            } else {
+                res.status(401).json({ error: "Aucun message trouvé !" });
+            }
+        })
+        .catch((error) =>
+            res.status(500).json({
+                error: "Une erreur s'est produite pendant l'affichage des messages, veuillez recommencer ultérieurement.",
+            })
+        );
+};
 
-//Afficher les likes d'un message
-exports.getAllLike = (req, res, next) => {
+// afficher les likes d'un message
+exports.getPostLikes = (req, res, next) => {
     db.Like.findAll({
         where: { postId: req.params.postId },
         include: {

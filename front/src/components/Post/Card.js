@@ -1,20 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { dateParser, isEmpty } from "../Utils";
+import { useDispatch, useSelector } from "react-redux";
+import { isEmpty } from "../Utils";
 import Moment from "react-moment";
 import "moment/locale/fr";
 import "./Card.css";
 import LikeButton from "./LikeButton";
+import { updatePost } from "../../actions/post.actions";
+import DeleteCard from "./DeleteCard";
+import CardComment from "./CardComment";
 
 const Card = ({ post }) => {
     const [isLoading, setIsLoading] = useState(true);
+    const [isUpdated, setIsUpdated] = useState(false);
+    const [textUpdate, setTextUpdate] = useState(null);
+    const [showComments, setShowComments] = useState(false);
     const usersData = useSelector((state) => state.usersReducer);
     const userData = useSelector((state) => state.userReducer);
+    const dispatch = useDispatch();
+
     const diffDateH = (
         <Moment fromNow ago>
             {post.createdAt}
         </Moment>
     );
+
+    const updateItem = () => {
+        if (textUpdate) {
+            dispatch(updatePost(post.id, textUpdate));
+        }
+        setIsUpdated(false);
+    };
 
     useEffect(() => {
         !isEmpty(usersData[0]) && setIsLoading(false);
@@ -35,6 +50,7 @@ const Card = ({ post }) => {
                                         .map((user) => {
                                             if (user.id === post.userId)
                                                 return user.profileAvatar;
+                                            else return null;
                                         })
                                         .join("")
                                 }
@@ -51,6 +67,7 @@ const Card = ({ post }) => {
                                                         " " +
                                                         user.firstName
                                                     );
+                                                else return null;
                                             })
                                             .join("")}
                                 </h3>
@@ -58,10 +75,37 @@ const Card = ({ post }) => {
                             </div>
                         </div>
                         <div className="card-top-right">
-                            <i className="fas fa-ellipsis-h"></i>
+                            {(userData.id === post.userId ||
+                                userData.admin === true) && (
+                                <div className="button-container">
+                                    <div
+                                        onClick={() => setIsUpdated(!isUpdated)}
+                                    >
+                                        <i
+                                            className="fas fa-ellipsis-h"
+                                            alt="Editer la publication"
+                                        ></i>
+                                    </div>
+                                    <DeleteCard id={post.id} />
+                                </div>
+                            )}
                         </div>
                     </div>
-                    <p>{post.content}</p>
+                    {isUpdated === false && <p>{post.content}</p>}
+                    {isUpdated === true && (
+                        <div className="updatePost">
+                            <textarea
+                                defaultValue={post.content}
+                                onChange={(e) => setTextUpdate(e.target.value)}
+                            />
+                            <div className="button-container">
+                                <button className="btn" onClick={updateItem}>
+                                    Valider modifications
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
                     {post.imagePost && (
                         <img
                             src={post.imagePost}
@@ -80,6 +124,7 @@ const Card = ({ post }) => {
                         <div className="card-footer-bottom">
                             <LikeButton post={post} />
                         </div>
+                        {showComments && <CardComment props={post} />}
                     </div>
                 </>
             )}

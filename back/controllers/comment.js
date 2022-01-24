@@ -5,7 +5,7 @@ require("dotenv").config();
 //Création d'un nouveau commentaire
 exports.createComment = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
-    const decodedToken = jwt.verify(token, process.env.tokenSecretKey);
+    const decodedToken = jwt.verify(token, process.env.JWT_TOKEN);
     const userId = decodedToken.userId;
     db.Post.findOne({
         where: { id: req.params.postId },
