@@ -119,12 +119,25 @@ const Card = ({ post }) => {
                                 <i className="far fa-thumbs-up"></i>
                                 <span>{post.Likes.length}</span>
                             </div>
-                            <p>852 Commentaires</p>
+                            <p>{post.Comments.length} Commentaires</p>
                         </div>
                         <div className="card-footer-bottom">
                             <LikeButton post={post} />
+                            <div
+                                className="comment-icon"
+                                onClick={() => setShowComments(!showComments)}
+                            >
+                                <i
+                                    class="far fa-comment-dots"
+                                    alt="comment"
+                                    onClick={() =>
+                                        setShowComments(!showComments)
+                                    }
+                                />
+                            </div>
                         </div>
-                        {showComments && <CardComment props={post} />}
+
+                        {showComments && <CardComment post={post} />}
                     </div>
                 </>
             )}

@@ -68,7 +68,6 @@ span {
     flex-direction: column;
     border-radius: 0 0 15px 15px;
     background-color: #fef5f4;
-    height: 89px;
     justify-content: space-around;
 }
 .card-footer-top {
@@ -101,4 +100,56 @@ span {
 }
 .like-container i {
     cursor: pointer;
+}
+.comment-container {
+    padding-left: 10px;
+    padding-top: 10px;
+    font-family: Programme-light;
+    width: calc(100% - 20px);
+    display: flex;
+    flex-direction: row;
+}
+.comment-icon {
+    font-size: 1.4rem;
+    height: 100%;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.comment-top-part {
+    padding-left: 10px;
+    padding-top: 10px;
+    font-family: Programme-light;
+    width: 100%;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: row;
+}
+
+.comment-left-part img {
+    width: 40px;
+    height: 40px;
+    clip-path: ellipse(50% 50%);
+}
+.comment-right-part {
+    display: flex;
+    background-color: lightblue;
+    border-radius: 0 15px 15px 15px;
+
+    flex-direction: column;
+}
+.comment-right-part-client {
+    display: flex;
+    background-color: darkseagreen;
+    border-radius: 15px 15px 0px 15px;
+
+    flex-direction: column;
+}
+.userLine h5 {
+    margin: 5px 0 0 10px;
+}
+.comment-content p {
+    margin-bottom: 5px;
+    margin-top: 1px;
 }

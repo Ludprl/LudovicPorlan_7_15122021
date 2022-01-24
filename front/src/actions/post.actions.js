@@ -2,11 +2,15 @@ import axios from "axios";
 
 const access_token = localStorage.getItem("userToken");
 
+// posts
 export const GET_POSTS = "GET_POSTS";
 export const LIKE_POST = "LIKE_POST";
 export const UNLIKE_POST = "UNLIKE_POST";
 export const UPDATE_POST = "UPDATE_POST";
 export const DELETE_POST = "DELETE_POST";
+
+// comments
+export const ADD_COMMENT = "ADD_COMMENT";
 
 export const getPosts = (num) => {
     return (dispatch) => {
@@ -87,6 +91,23 @@ export const deletePost = (postId) => {
         })
             .then((res) => {
                 dispatch({ type: DELETE_POST, payload: { postId } });
+            })
+            .catch((err) => console.log(err));
+    };
+};
+
+export const addComment = (postId, text) => {
+    return (dispatch) => {
+        return axios({
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+            },
+            method: "post",
+            url: `${process.env.REACT_APP_API_URL}api/comment/${postId}`,
+            data: { content: text },
+        })
+            .then((res) => {
+                dispatch({ type: ADD_COMMENT, payload: { postId } });
             })
             .catch((err) => console.log(err));
     };
