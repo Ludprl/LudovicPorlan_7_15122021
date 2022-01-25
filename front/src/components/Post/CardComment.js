@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addComment, getPosts } from "../../actions/post.actions";
 import { isEmpty } from "../Utils";
+import EditDeleteComment from "./EditDeleteComment";
 
 const CardComment = ({ post }) => {
     const [text, setText] = useState("");
@@ -17,7 +18,6 @@ const CardComment = ({ post }) => {
                 .then(() => setText(""));
         }
     };
-
     return (
         <div className="comments-container">
             <div className="leave-comment">
@@ -56,10 +56,9 @@ const CardComment = ({ post }) => {
                         </div>
                         <div
                             className={
-                                (console.log(comment.userId),
                                 comment.userId === userData.id
                                     ? "comment-right-part-client"
-                                    : "comment-right-part")
+                                    : "comment-right-part"
                             }
                             key={comment.id}
                         >
@@ -81,6 +80,13 @@ const CardComment = ({ post }) => {
                             </div>
                             <div className="comment-content">
                                 <p>{comment.content}</p>
+                                {(userData.id === comment.userId ||
+                                    userData.admin === true) && (
+                                    <EditDeleteComment
+                                        comment={comment}
+                                        postId={post.id}
+                                    />
+                                )}
                             </div>
                         </div>
                     </div>

@@ -1,3 +1,48 @@
+.post-form {
+    display: flex;
+    background-color: #fff;
+    flex-direction: column;
+    margin-bottom: 15px;
+    border: 1px solid #ced0d4;
+    border-radius: 7px;
+    padding: 10px;
+}
+.post-form textarea {
+    font-family: poppins;
+    background-color: #f0f2f5;
+    border-radius: 7px;
+    border: 0px;
+    padding: 10px;
+}
+.post-form textarea:focus {
+    background-color: white;
+}
+.post-form .card-container {
+    margin-top: 10px;
+}
+
+.form-footer i {
+    padding: 10px 0 15px 0;
+    cursor: pointer;
+    font-size: 1.8rem;
+}
+.form-footer input {
+    display: none;
+}
+.btn-send {
+    display: flex;
+    justify-content: center;
+}
+.form-footer button {
+    cursor: pointer;
+    border: 0;
+    font-weight: 300;
+    font-family: poppins;
+    height: 40px;
+    border-radius: 7px;
+    width: 100%;
+}
+
 ul {
     margin: 15px 0;
     padding: 0 0;
@@ -5,18 +50,24 @@ ul {
 }
 .card-container {
     display: flex;
+    background-color: #fff;
     flex-direction: column;
     margin-bottom: 15px;
-    border: 1px solid whitesmoke;
-    border-radius: 15px;
+    border: 1px solid #ced0d4;
+    border-radius: 7px;
+}
+.card-container img {
+    object-fit: scale-down;
+    width: auto;
+    max-height: 600px;
 }
 .card-container p {
     padding: 0px 10px 0 10px;
-    font-family: Programme-light;
+    font-family: Poppins;
     width: auto;
 }
-
 .thread-container {
+    padding-top: 25px;
     margin: auto;
     max-width: 580px;
 }
@@ -26,7 +77,7 @@ ul {
 .card-top {
     padding-left: 10px;
     padding-top: 10px;
-    font-family: Programme-light;
+    font-family: Poppins;
     width: 100%;
     justify-content: space-between;
     display: flex;
@@ -67,16 +118,22 @@ span {
     display: flex;
     flex-direction: column;
     border-radius: 0 0 15px 15px;
-    background-color: #fef5f4;
+    background-color: #fff;
     justify-content: space-around;
 }
 .card-footer-top {
     display: flex;
-    font-family: Programme-light;
+    font-family: Poppins;
     height: 43px;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid white;
+}
+.card-footer hr {
+    border: 1px solid rgba(206, 208, 212, 0.5);
+    width: calc(100% - 20px);
+    margin-top: 0;
+    margin-bottom: 0;
 }
 .card-footer-top p {
     width: auto;
@@ -88,15 +145,24 @@ span {
     width: auto;
 }
 .card-footer-bottom {
+    justify-content: center;
     display: flex;
-    height: 45px;
+    align-items: center;
+    height: 44px;
 }
 .like-container {
-    height: 100%;
-    width: 50%;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 1.4rem;
+    height: 80%;
+    width: calc(50% - 10px);
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 7px;
+}
+.like-container:hover {
+    background-color: #f2f2f2;
 }
 .like-container i {
     cursor: pointer;
@@ -104,23 +170,28 @@ span {
 .comment-container {
     padding-left: 10px;
     padding-top: 10px;
-    font-family: Programme-light;
-    width: calc(100% - 20px);
+    font-family: Poppins;
+    width: calc(50% - 10px);
     display: flex;
     flex-direction: row;
 }
 .comment-icon {
+    border-radius: 7px;
+    cursor: pointer;
     font-size: 1.4rem;
-    height: 100%;
-    width: 50%;
+    height: 80%;
+    width: calc(50% - 10px);
     display: flex;
     align-items: center;
     justify-content: center;
 }
+.comment-icon:hover {
+    background-color: #f2f2f2;
+}
 .comment-top-part {
     padding-left: 10px;
     padding-top: 10px;
-    font-family: Programme-light;
+    font-family: Poppins;
     width: 100%;
     justify-content: space-between;
     display: flex;

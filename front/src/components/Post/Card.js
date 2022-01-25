@@ -121,8 +121,10 @@ const Card = ({ post }) => {
                             </div>
                             <p>{post.Comments.length} Commentaires</p>
                         </div>
+                        <hr></hr>
                         <div className="card-footer-bottom">
                             <LikeButton post={post} />
+
                             <div
                                 className="comment-icon"
                                 onClick={() => setShowComments(!showComments)}

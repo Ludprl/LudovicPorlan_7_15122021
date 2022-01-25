@@ -1,3 +1,9 @@
+.home-page {
+    background-color: #fff;
+}
+.main {
+    background-color: #f0f2f5;
+}
 .log-container {
     width: 100%;
     max-width: 980px;

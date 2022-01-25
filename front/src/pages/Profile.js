@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { UidContext } from "../components/AppContext";
-import Login from "../components/Login";
 import Navbar from "../components/Navbar/Navbar";
 import UpdateProfil from "../components/Profil/UpdateProfil";
 

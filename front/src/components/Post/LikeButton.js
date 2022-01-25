@@ -9,13 +9,13 @@ const LikeButton = ({ post }) => {
     const Uid = useContext(UidContext);
     const LikeArray = post.Likes;
 
-    const like = () => {
+    const like = async () => {
         dispatch(likePost(post.id, liked, Uid)).then(() =>
             dispatch(getPosts())
         );
         setLiked(true);
     };
-    const unlike = () => {
+    const unlike = async () => {
         dispatch(unlikePost(post.id, liked, Uid)).then(() =>
             dispatch(getPosts())
         );
@@ -29,13 +29,9 @@ const LikeButton = ({ post }) => {
     }, [Uid, LikeArray]);
 
     return (
-        <div className="like-container">
+        <div className="like-container" onClick={unlike}>
             {liked ? (
-                <i
-                    className="fas fa-thumbs-up"
-                    onClick={unlike}
-                    alt="Ne plus aimer"
-                ></i>
+                <i className="fas fa-thumbs-up" alt="Ne plus aimer"></i>
             ) : (
                 <i className="far fa-thumbs-up" onClick={like} alt="Aimer"></i>
             )}

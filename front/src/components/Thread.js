@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPosts } from "../actions/post.actions";
 import { isEmpty } from "./Utils";
 import Card from "./Post/Card";
+import NewPostForm from "./Post/NewPostForm";
 
 const Thread = () => {
     const [loadPost, setLoadPost] = useState(true);
@@ -31,6 +32,8 @@ const Thread = () => {
 
     return (
         <div className="thread-container">
+            <NewPostForm />
+
             <ul>
                 {!isEmpty(posts[0]) &&
                     posts.map((post) => {

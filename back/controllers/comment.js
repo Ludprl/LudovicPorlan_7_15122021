@@ -107,3 +107,41 @@ exports.deleteComment = (req, res, next) => {
             })
         );
 };
+
+//modification d'un commentaire
+exports.editComment = (req, res, next) => {
+    console.log(req.body.content);
+    console.log(req.params.postId);
+    const commentObject = {
+        content: req.body.content,
+    };
+
+    db.Comment.findOne({
+        where: { id: req.body.commentId },
+    })
+        .then((commentFound) => {
+            if (commentFound) {
+                db.Comment.update(commentObject, {
+                    where: { id: req.body.commentId },
+                })
+                    .then((comment) =>
+                        res.status(200).json({
+                            message:
+                                "Votre commentaire a été modifié avec succès !",
+                        })
+                    )
+                    .catch((error) =>
+                        res.status(500).json({
+                            error: "Une erreur s'est produite pendant la modification de votre commentaire, veuillez recommencer ultérieurement.",
+                        })
+                    );
+            } else {
+                res.status(401).json({ error: "Aucun message trouvé !" });
+            }
+        })
+        .catch((error) =>
+            res.status(500).json({
+                error: "Une erreur s'est produite, veuillez recommencer ultérieurement.",
+            })
+        );
+};
