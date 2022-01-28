@@ -130,7 +130,7 @@ const Card = ({ post }) => {
                                 onClick={() => setShowComments(!showComments)}
                             >
                                 <i
-                                    class="far fa-comment-dots"
+                                    className="far fa-comment-dots"
                                     alt="comment"
                                     onClick={() =>
                                         setShowComments(!showComments)

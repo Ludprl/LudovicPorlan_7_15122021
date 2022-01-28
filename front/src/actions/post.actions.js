@@ -28,7 +28,14 @@ export const getPosts = (num) => {
                 console.log(res.data);
                 dispatch({ type: GET_POSTS, payload: array });
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                console.log(err);
+                const errorData = err.response.data;
+                if (errorData.sessionMessage === "Session expire") {
+                    localStorage.removeItem("userToken");
+                    window.location.reload();
+                }
+            });
     };
 };
 

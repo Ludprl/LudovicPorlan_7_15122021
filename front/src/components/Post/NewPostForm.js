@@ -78,8 +78,8 @@ const NewPostForm = () => {
                     ) : null}
 
                     <div className="form-footer">
-                        <label htmlFor="file" for="file">
-                            <i class="far fa-image" />
+                        <label htmlFor="file" htmlFor="file">
+                            <i className="far fa-image" />
                         </label>
                         <input
                             type="file"

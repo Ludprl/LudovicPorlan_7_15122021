@@ -37,7 +37,7 @@ const EditDeleteComment = (comment, postId) => {
         <div className="edit-comment">
             {isAuthor && edit === false && (
                 <span onClick={() => setEdit(!edit)}>
-                    <i class="far fa-edit" alt="edit-comment" />
+                    <i className="far fa-edit" alt="edit-comment" />
                 </span>
             )}
             {isAuthor && edit && (
@@ -51,7 +51,7 @@ const EditDeleteComment = (comment, postId) => {
                         htmlFor="text"
                         onClick={() => setEdit(!edit)}
                     >
-                        <i class="fas fa-edit"></i>
+                        <i className="fas fa-edit"></i>
                     </div>
                     <div
                         className="delete-comment-btn"
