@@ -75,30 +75,40 @@ exports.getAllComments = (req, res, next) => {
 
 //Suppression d'un commentaire
 exports.deleteComment = (req, res, next) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_TOKEN);
+    const userId = decodedToken.userId;
+    const isUserAdmin = decodedToken.admin;
     db.Comment.findOne({
         attributes: ["id"],
         where: { id: req.params.commentId },
     })
         .then((commentFound) => {
-            if (commentFound) {
-                db.Comment.destroy({
-                    where: { id: req.params.commentId },
-                })
-                    .then(() =>
-                        res.status(200).json({
-                            message:
-                                "Votre commentaire a été supprimé avec succès !",
-                        })
-                    )
-                    .catch(() =>
-                        res.status(500).json({
-                            error: "Une erreur s'est produite pendant la suppression de votre commentaire, veuillez recommencer ultérieurement.",
-                        })
-                    );
+            if ((commentFound.userId === userId) | isUserAdmin) {
+                if (commentFound) {
+                    db.Comment.destroy({
+                        where: { id: req.params.commentId },
+                    })
+                        .then(() =>
+                            res.status(200).json({
+                                message:
+                                    "Votre commentaire a été supprimé avec succès !",
+                            })
+                        )
+                        .catch(() =>
+                            res.status(500).json({
+                                error: "Une erreur s'est produite pendant la suppression de votre commentaire, veuillez recommencer ultérieurement.",
+                            })
+                        );
+                } else {
+                    return res
+                        .status(401)
+                        .json({ error: "Aucun commentaire trouvé !" });
+                }
             } else {
-                return res
-                    .status(401)
-                    .json({ error: "Aucun commentaire trouvé !" });
+                res.status(403).json({
+                    error: "Cette opération est interdite",
+                });
             }
         })
         .catch((error) =>
@@ -110,6 +120,10 @@ exports.deleteComment = (req, res, next) => {
 
 //modification d'un commentaire
 exports.editComment = (req, res, next) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_TOKEN);
+    const userId = decodedToken.userId;
+    const isUserAdmin = decodedToken.admin;
     console.log(req.body.content);
     console.log(req.params.postId);
     const commentObject = {
@@ -120,23 +134,29 @@ exports.editComment = (req, res, next) => {
         where: { id: req.body.commentId },
     })
         .then((commentFound) => {
-            if (commentFound) {
-                db.Comment.update(commentObject, {
-                    where: { id: req.body.commentId },
-                })
-                    .then((comment) =>
-                        res.status(200).json({
-                            message:
-                                "Votre commentaire a été modifié avec succès !",
-                        })
-                    )
-                    .catch((error) =>
-                        res.status(500).json({
-                            error: "Une erreur s'est produite pendant la modification de votre commentaire, veuillez recommencer ultérieurement.",
-                        })
-                    );
+            if ((commentFound.userId === userId) | isUserAdmin) {
+                if (commentFound) {
+                    db.Comment.update(commentObject, {
+                        where: { id: req.body.commentId },
+                    })
+                        .then((comment) =>
+                            res.status(200).json({
+                                message:
+                                    "Votre commentaire a été modifié avec succès !",
+                            })
+                        )
+                        .catch((error) =>
+                            res.status(500).json({
+                                error: "Une erreur s'est produite pendant la modification de votre commentaire, veuillez recommencer ultérieurement.",
+                            })
+                        );
+                } else {
+                    res.status(401).json({ error: "Aucun message trouvé !" });
+                }
             } else {
-                res.status(401).json({ error: "Aucun message trouvé !" });
+                res.status(403).json({
+                    error: "Cette opération est interdite",
+                });
             }
         })
         .catch((error) =>
