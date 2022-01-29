@@ -15,6 +15,7 @@ module.exports = {
                     model: "Users",
                     key: "id",
                 },
+                onDelete: "cascade",
             },
             postId: {
                 allowNull: false,
@@ -23,6 +24,15 @@ module.exports = {
                     model: "Posts",
                     key: "id",
                 },
+                onDelete: "cascade",
+            },
+            createdAt: {
+                allowNull: false,
+                type: Sequelize.DATE,
+            },
+            updatedAt: {
+                allowNull: false,
+                type: Sequelize.DATE,
             },
         });
     },

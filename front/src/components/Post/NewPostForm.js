@@ -78,14 +78,14 @@ const NewPostForm = () => {
                     ) : null}
 
                     <div className="form-footer">
-                        <label htmlFor="file" htmlFor="file">
+                        <label htmlFor="file">
                             <i className="far fa-image" />
                         </label>
                         <input
                             type="file"
                             id="file"
                             name="file"
-                            accept=".jpg, .jpeg,.png"
+                            accept=".gif, .jpg, .jpeg, .png"
                             onChange={(e) => handlePicture(e)}
                         />
                         <div className="btn-send">

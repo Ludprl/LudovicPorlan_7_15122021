@@ -1,19 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import "./Navbar.css";
 import logoIcon from "./../../assets/logo/icon-left-font-monochrome-white.svg";
+import logoIconSmall from "./../../assets/logo/icon-white.png";
 import Logout from "../Login/Logout";
 import { useSelector } from "react-redux";
 
 const Navbar = () => {
+    const [width, setWidth] = useState(window.innerWidth);
+    const breakpoint = 565;
     const userData = useSelector((state) => state.userReducer);
+
+    useEffect(() => {
+        const handleResizeWindow = () => setWidth(window.innerWidth);
+        window.addEventListener("resize", handleResizeWindow);
+        return () => {
+            window.removeEventListener("resize", handleResizeWindow);
+        };
+    }, []);
+
     return (
         <nav>
             <div className="nav-container">
                 <div className="logo">
                     <NavLink to="/">
                         <div className="Logo">
-                            <img src={logoIcon} alt="Groupomania" />
+                            {width > breakpoint ? (
+                                <img src={logoIcon} alt="Groupomania" />
+                            ) : (
+                                <img src={logoIconSmall} alt="Groupomania" />
+                            )}
                         </div>
                     </NavLink>
                 </div>

@@ -49,7 +49,7 @@ exports.signup = (req, res, next) => {
             error: "Le mot de passe doit comporter entre 8 et 30 caractères, dont au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial !",
         });
     }
-    //vérification que l'utilisation n'existe pas encore
+    //vérification que l'utilisation n'existe pas déjà
     db.User.findOne({
         attributes: ["lastName" || "firstName" || "email"],
         where: {
@@ -69,6 +69,9 @@ exports.signup = (req, res, next) => {
                             email: req.body.email,
                             password: hash, //on récupère le mdp hashé de bcrypt
                             admin: 0,
+                            profileAvatar: `${req.protocol}://${req.get(
+                                "host"
+                            )}/images/upload/avatars/icon-default-avatar.png`,
                         });
                         user.save() //on utilise la méthode save de notre user pour l'enregistrer dans la bdd
                             .then(() =>
@@ -124,7 +127,7 @@ exports.login = (req, res, next) => {
                             profileAvatar: user.profileAvatar,
                             userBio: user.bio,
                             token: jwt.sign(
-                                { userId: user.id },
+                                { userId: user.id, admin: user.admin },
                                 process.env.JWT_TOKEN,
                                 { expiresIn: "72h" }
                             ),

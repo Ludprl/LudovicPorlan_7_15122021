@@ -86,6 +86,10 @@ exports.getAllPosts = (req, res, next) => {
 
 //Modification d'un message
 exports.modifyPost = (req, res, next) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_TOKEN);
+    const userId = decodedToken.userId;
+    const isUserAdmin = decodedToken.admin;
     console.log("file", req.file);
     console.log("content", req.body.content);
     console.log("bodypost", req.body.post);
@@ -102,24 +106,37 @@ exports.modifyPost = (req, res, next) => {
     db.Post.findOne({
         where: { id: req.params.postId },
     })
+
         .then((postFound) => {
-            if (postFound) {
-                db.Post.update(postObject, {
-                    where: { id: req.params.postId },
-                })
-                    .then((post) =>
-                        res.status(200).json({
-                            message:
-                                "Votre message a été modifié avec succès !",
+            if (isUserAdmin | (userId == postFound.userId)) {
+                if (postFound) {
+                    if (isUserAdmin | (userId == postFound.userId)) {
+                        db.Post.update(postObject, {
+                            where: { id: req.params.postId },
                         })
-                    )
-                    .catch((error) =>
-                        res.status(500).json({
-                            error: "Une erreur s'est produite pendant la modification de votre message, veuillez recommencer ultérieurement.",
-                        })
-                    );
+                            .then((post) =>
+                                res.status(200).json({
+                                    message:
+                                        "Votre message a été modifié avec succès !",
+                                })
+                            )
+                            .catch((error) =>
+                                res.status(500).json({
+                                    error: "Une erreur s'est produite pendant la modification de votre message, veuillez recommencer ultérieurement.",
+                                })
+                            );
+                    } else {
+                        res.status(403).json({
+                            error: "Cette opération est interdite",
+                        });
+                    }
+                } else {
+                    res.status(401).json({ error: "Aucun message trouvé !" });
+                }
             } else {
-                res.status(401).json({ error: "Aucun message trouvé !" });
+                res.status(403).json({
+                    error: "Cette opération est interdite",
+                });
             }
         })
         .catch((error) =>
@@ -131,17 +148,37 @@ exports.modifyPost = (req, res, next) => {
 
 //Suppression d'un message
 exports.deletePost = (req, res, next) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_TOKEN);
+    const userId = decodedToken.userId;
+    const isUserAdmin = decodedToken.admin;
     db.Post.findOne({
-        attributes: ["id"],
         where: { id: req.params.postId },
     })
         .then((post) => {
-            if (post) {
-                if (post.imagePost != null) {
-                    const filename = post.imagePost.split(
-                        "/images/upload/posts/"
-                    )[1];
-                    fs.unlink(`images/upload/posts/${filename}`, () => {
+            if (isUserAdmin | (userId == post.userId)) {
+                if (post) {
+                    if (post.imagePost !== null) {
+                        const filename = post.imagePost.split(
+                            "/images/upload/posts/"
+                        )[1];
+                        fs.unlink(`images/upload/posts/${filename}`, () => {
+                            db.Post.destroy({
+                                where: { id: req.params.postId },
+                            })
+                                .then(() =>
+                                    res.status(200).json({
+                                        message:
+                                            "Votre message a été supprimé avec succès !",
+                                    })
+                                )
+                                .catch(() =>
+                                    res.status(500).json({
+                                        error: "Une erreur s'est produite pendant la suppression de votre message, veuillez recommencer.",
+                                    })
+                                );
+                        });
+                    } else {
                         db.Post.destroy({
                             where: { id: req.params.postId },
                         })
@@ -153,30 +190,19 @@ exports.deletePost = (req, res, next) => {
                             )
                             .catch(() =>
                                 res.status(500).json({
-                                    error: "Une erreur s'est produite pendant la suppression de votre message, veuillez recommencer ultérieurement.",
+                                    error: "Une erreur s'est produite pendant la suppression de votre message, recommencer ultérieurement.",
                                 })
                             );
-                    });
+                    }
                 } else {
-                    db.Post.destroy({
-                        where: { id: req.params.postId },
-                    })
-                        .then(() =>
-                            res.status(200).json({
-                                message:
-                                    "Votre message a été supprimé avec succès !",
-                            })
-                        )
-                        .catch(() =>
-                            res.status(500).json({
-                                error: "Une erreur s'est produite pendant la suppression de votre message, veuillez recommencer ultérieurement.",
-                            })
-                        );
+                    return res
+                        .status(401)
+                        .json({ error: "Aucun message trouvé !" });
                 }
             } else {
-                return res
-                    .status(401)
-                    .json({ error: "Aucun message trouvé !" });
+                res.status(403).json({
+                    error: "Cette opération est interdite",
+                });
             }
         })
         .catch((error) =>

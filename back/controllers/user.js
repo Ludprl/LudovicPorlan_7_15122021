@@ -58,13 +58,14 @@ exports.modifyUserProfile = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, process.env.JWT_TOKEN);
     const userId = decodedToken.userId;
+    const isUserAdmin = decodedToken.admin;
     // recherche de l'utilisateur avec son userId
     db.User.findOne({
         where: { id: userId },
     })
         .then((userFound) => {
             // On vérifie que l'utilisateur est bien propriétaire du compte
-            if (userFound.id === userId) {
+            if ((userFound.id === userId) | isUserAdmin) {
                 if (req.body.admin) {
                     return res.status(401).json({
                         error: "Vous n'avez pas l'autorisation d'effectuer cette action.",
@@ -74,7 +75,6 @@ exports.modifyUserProfile = (req, res, next) => {
                     const oldFile = userFound.profileAvatar.split(
                         "/images/upload/avatars/"
                     )[1];
-                    console.log("COUCOU" + oldFile);
                     const userObject = req.file
                         ? {
                               ...JSON.parse(userId),
@@ -84,7 +84,7 @@ exports.modifyUserProfile = (req, res, next) => {
                           }
                         : { ...req.body };
                     //on supprime l'ancienne image seulement si elle existe
-                    if (oldFile !== undefined) {
+                    if (oldFile !== "icon-default-avatar.png") {
                         fs.unlinkSync(`images/upload/avatars/${oldFile}`);
                     }
                     db.User.update(userObject, {
@@ -127,17 +127,23 @@ exports.modifyUserProfile = (req, res, next) => {
 };
 
 //Suppression d'un compte
+
 exports.deleteAccount = (req, res, next) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_TOKEN);
+    const userId = decodedToken.userId;
+    const isUserAdmin = decodedToken.admin;
     const id = req.params.id;
-    db.User.findOne({
-        attributes: ["id"],
-        where: { id: id },
-    })
-        .then((user) => {
-            if (user.profileAvatar != null) {
-                const filename = user.profileAvatar.split(
-                    "/images/upload/avatars/"
-                )[1];
+    if ((userId == id) | isUserAdmin) {
+        db.User.findOne({
+            where: { id: id },
+        }).then((user) => {
+            const filename = user.profileAvatar.split(
+                "/images/upload/avatars/"
+            )[1];
+            console.log(filename);
+
+            if (filename !== "icon-default-avatar.png") {
                 fs.unlink(`images/upload/avatars/${filename}`, () => {
                     db.User.destroy({
                         where: { id: id },
@@ -154,7 +160,7 @@ exports.deleteAccount = (req, res, next) => {
                             })
                         );
                 });
-            } else if (user) {
+            } else {
                 db.User.destroy({
                     where: { id: id },
                 })
@@ -169,13 +175,11 @@ exports.deleteAccount = (req, res, next) => {
                             error: "Une erreur s'est produite pendant la suppression du compte, veuillez recommencer ultérieurement.",
                         })
                     );
-            } else {
-                res.status(401).json({ error: "Utilisateur inconnu !" });
             }
-        })
-        .catch((error) =>
-            res.status(500).json({
-                error: "Une erreur s'est produite, veuillez recommencer ultérieurement.",
-            })
-        );
+        });
+    } else {
+        res.status(403).json({
+            error: "Cette opération est interdite",
+        });
+    }
 };

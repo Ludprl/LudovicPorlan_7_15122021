@@ -31,7 +31,7 @@ const EditDeleteComment = (comment, postId) => {
             console.log(comment);
         }
         return () => {};
-    }, [uid, comment.comment.userId]);
+    }, [uid, comment.comment.userId, comment, userData.admin]);
 
     return (
         <div className="edit-comment">

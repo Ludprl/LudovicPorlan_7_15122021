@@ -57,7 +57,7 @@ ul {
     border-radius: 7px;
 }
 .card-container img {
-    object-fit: scale-down;
+    object-fit: contain;
     width: auto;
     max-height: 600px;
 }
