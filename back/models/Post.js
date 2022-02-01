@@ -6,8 +6,8 @@ module.exports = (sequelize, DataTypes) => {
             models.Post.belongsTo(models.User, {
                 foreignKey: "userId",
             });
-            models.Post.hasMany(models.Like);
-            models.Post.hasMany(models.Comment);
+            models.Post.hasMany(models.Like, { onDelete: "cascade" });
+            models.Post.hasMany(models.Comment, { onDelete: "cascade" });
         }
     }
     Post.init(

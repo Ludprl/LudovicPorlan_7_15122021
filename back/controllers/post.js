@@ -154,60 +154,86 @@ exports.deletePost = (req, res, next) => {
     const isUserAdmin = decodedToken.admin;
     db.Post.findOne({
         where: { id: req.params.postId },
-    })
-        .then((post) => {
-            if (isUserAdmin | (userId == post.userId)) {
-                if (post) {
-                    if (post.imagePost !== null) {
-                        const filename = post.imagePost.split(
-                            "/images/upload/posts/"
-                        )[1];
-                        fs.unlink(`images/upload/posts/${filename}`, () => {
-                            db.Post.destroy({
-                                where: { id: req.params.postId },
-                            })
-                                .then(() =>
-                                    res.status(200).json({
-                                        message:
-                                            "Votre message a été supprimé avec succès !",
-                                    })
-                                )
-                                .catch(() =>
-                                    res.status(500).json({
-                                        error: "Une erreur s'est produite pendant la suppression de votre message, veuillez recommencer.",
-                                    })
-                                );
-                        });
-                    } else {
-                        db.Post.destroy({
-                            where: { id: req.params.postId },
-                        })
-                            .then(() =>
-                                res.status(200).json({
-                                    message:
-                                        "Votre message a été supprimé avec succès !",
-                                })
-                            )
-                            .catch(() =>
-                                res.status(500).json({
-                                    error: "Une erreur s'est produite pendant la suppression de votre message, recommencer ultérieurement.",
-                                })
-                            );
-                    }
-                } else {
-                    return res
-                        .status(401)
-                        .json({ error: "Aucun message trouvé !" });
-                }
-            } else {
-                res.status(403).json({
-                    error: "Cette opération est interdite",
+    }).then((post) => {
+        if (isUserAdmin | (userId == post.userId)) {
+            // On s'occupe des likes
+            db.Like.findAll({
+                where: { postId: req.params.postId },
+            }).then((postLikes) => {
+                db.Like.destroy({
+                    where: { postId: req.params.postId },
                 });
-            }
-        })
-        .catch((error) =>
-            res.status(500).json({
-                error: "Une erreur s'est produite, veuillez recommencer ultérieurement.",
+            });
+            // On s'occupe des commentaires
+            db.Comment.findAll({
+                where: { postId: req.params.postId },
+            }).then((postComments) => {
+                db.Comment.destroy({
+                    where: { postId: req.params.postId },
+                });
+            });
+            // on s'occupe du post.
+            db.Post.findOne({
+                where: { id: req.params.postId },
             })
-        );
+                .then((post) => {
+                    if (isUserAdmin | (userId == post.userId)) {
+                        if (post) {
+                            if (post.imagePost !== null) {
+                                const filename = post.imagePost.split(
+                                    "/images/upload/posts/"
+                                )[1];
+                                fs.unlink(
+                                    `images/upload/posts/${filename}`,
+                                    () => {
+                                        db.Post.destroy({
+                                            where: { id: req.params.postId },
+                                        })
+                                            .then(() =>
+                                                res.status(200).json({
+                                                    message:
+                                                        "Votre message a été supprimé avec succès !",
+                                                })
+                                            )
+                                            .catch(() =>
+                                                res.status(500).json({
+                                                    error: "Une erreur s'est produite pendant la suppression de votre message, veuillez recommencer.",
+                                                })
+                                            );
+                                    }
+                                );
+                            } else {
+                                db.Post.destroy({
+                                    where: { id: req.params.postId },
+                                })
+                                    .then(() =>
+                                        res.status(200).json({
+                                            message:
+                                                "Votre message a été supprimé avec succès !",
+                                        })
+                                    )
+                                    .catch(() =>
+                                        res.status(500).json({
+                                            error: "Une erreur s'est produite pendant la suppression de votre message, recommencer ultérieurement.",
+                                        })
+                                    );
+                            }
+                        } else {
+                            return res
+                                .status(401)
+                                .json({ error: "Aucun message trouvé !" });
+                        }
+                    } else {
+                        res.status(403).json({
+                            error: "Cette opération est interdite",
+                        });
+                    }
+                })
+                .catch((error) =>
+                    res.status(500).json({
+                        error: "Une erreur s'est produite, veuillez recommencer ultérieurement.",
+                    })
+                );
+        }
+    });
 };

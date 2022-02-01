@@ -41,14 +41,11 @@ const EditDeleteComment = (comment, postId) => {
                 </span>
             )}
             {isAuthor && edit && (
-                <form
-                    action=""
-                    onSubmit={handleEdit}
-                    className="edit-comment-form"
-                >
+                <>
                     <div
                         className="edit-btn"
                         htmlFor="text"
+                        title="Modifier ce commentaire"
                         onClick={() => setEdit(!edit)}
                     >
                         <i className="fas fa-edit"></i>
@@ -64,21 +61,29 @@ const EditDeleteComment = (comment, postId) => {
                                 handleDelete();
                         }}
                     >
-                        <i class="far fa-trash-alt" alt="delete" />
+                        <i
+                            class="far fa-trash-alt"
+                            alt="delete"
+                            title="Effacer ce commentaire"
+                            aria-hidden="true"
+                        />
                     </div>
-
-                    <br />
-                    <textarea
-                        type="text"
-                        name="text"
-                        onChange={(e) => setText(e.target.value)}
-                        defaultValue={comment.comment.content}
-                        cols="25"
-                        rows="3"
-                    />
-                    <br />
-                    <input type="submit" value="Valider modifications" />
-                </form>
+                    <form
+                        action=""
+                        onSubmit={handleEdit}
+                        className="edit-comment-form"
+                    >
+                        <textarea
+                            type="text"
+                            name="text"
+                            onChange={(e) => setText(e.target.value)}
+                            defaultValue={comment.comment.content}
+                            cols="26"
+                            rows="3"
+                        />
+                        <input type="submit" value="Valider modifications" />
+                    </form>
+                </>
             )}
         </div>
     );

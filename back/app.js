@@ -5,6 +5,7 @@ const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const postRoutes = require("./routes/post");
 const commentRoutes = require("./routes/comment");
+const cors = require("cors");
 const helmet = require("helmet");
 require("dotenv").config();
 
@@ -19,6 +20,7 @@ app.use((req, res, next) => {
 });
 
 app.use(helmet());
+app.use(cors());
 
 app.use(express.json());
 

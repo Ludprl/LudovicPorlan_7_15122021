@@ -26,9 +26,17 @@ const Navbar = () => {
                     <NavLink to="/">
                         <div className="Logo">
                             {width > breakpoint ? (
-                                <img src={logoIcon} alt="Groupomania" />
+                                <img
+                                    src={logoIcon}
+                                    alt="Groupomania"
+                                    title="Groupomania"
+                                />
                             ) : (
-                                <img src={logoIconSmall} alt="Groupomania" />
+                                <img
+                                    src={logoIconSmall}
+                                    alt="Groupomania"
+                                    title="Groupomania"
+                                />
                             )}
                         </div>
                     </NavLink>
@@ -45,7 +53,10 @@ const Navbar = () => {
                     <li>
                         <NavLink to="/profil">
                             <p>
-                                <i className="fas fa-user-circle"></i>
+                                <i
+                                    className="fas fa-user-circle"
+                                    title="Profil"
+                                ></i>
                             </p>
                         </NavLink>
                     </li>

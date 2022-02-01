@@ -26,17 +26,18 @@ const CardComment = ({ post }) => {
                     onSubmit={handleComment}
                     className="comment-form"
                 >
-                    <input
-                        type="text"
+                    <textarea
                         name="text"
+                        placeholder="Du nouveau ?"
                         onChange={(e) => setText(e.target.value)}
                         value={text}
-                        placeholder="Laisser un commentaire"
                     />
+
                     <input type="submit" />
                 </form>
             </div>
             {post.Comments.map((comment) => {
+                const usersComment = comment.content;
                 return (
                     <div className="comment-container">
                         <div className="comment-left-part">
@@ -79,7 +80,16 @@ const CardComment = ({ post }) => {
                                 </h5>
                             </div>
                             <div className="comment-content">
-                                <p>{comment.content}</p>
+                                {usersComment
+                                    .split("\n")
+                                    .map((usersComment, key) => {
+                                        return (
+                                            <span key={key}>
+                                                {usersComment}
+                                                <br />
+                                            </span>
+                                        );
+                                    })}
                                 {(userData.id === comment.userId ||
                                     userData.admin === true) && (
                                     <EditDeleteComment

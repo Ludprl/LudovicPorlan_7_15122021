@@ -56,6 +56,30 @@ ul {
     border: 1px solid #ced0d4;
     border-radius: 7px;
 }
+.updatePost {
+    margin: 10px;
+}
+.updatePost textarea {
+    font-family: poppins;
+    background-color: #f0f2f5;
+    border-radius: 7px;
+    border: 0px;
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.updatePost textarea:focus {
+    background-color: white;
+}
+.updatePost button {
+    cursor: pointer;
+    border: 0;
+    font-weight: 300;
+    font-family: poppins;
+    height: 40px;
+    border-radius: 7px;
+    width: 100%;
+}
 .card-container img {
     object-fit: contain;
     width: auto;
@@ -70,6 +94,9 @@ ul {
     padding-top: 25px;
     margin: auto;
     max-width: 580px;
+}
+.thread-container ul {
+    margin-bottom: 30px;
 }
 .fa-spinner {
     color: #fe7b0d;
@@ -161,17 +188,21 @@ span {
     justify-content: center;
     border-radius: 7px;
 }
+
 .like-container:hover {
     background-color: #f2f2f2;
 }
 .like-container i {
     cursor: pointer;
 }
+.comments-container {
+    padding-bottom: 10px;
+}
 .comment-container {
     padding-left: 10px;
     padding-top: 10px;
     font-family: Poppins;
-    width: calc(50% - 10px);
+    width: calc(100% - 20px);
     display: flex;
     flex-direction: row;
 }
@@ -205,12 +236,16 @@ span {
 }
 .comment-right-part {
     display: flex;
+    margin-left: 10px;
     background-color: lightblue;
     border-radius: 0 15px 15px 15px;
-
+    width: 100%;
     flex-direction: column;
 }
 .comment-right-part-client {
+    width: 100%;
+    margin-left: 10px;
+
     display: flex;
     background-color: darkseagreen;
     border-radius: 15px 15px 0px 15px;
@@ -223,4 +258,32 @@ span {
 .comment-content p {
     margin-bottom: 5px;
     margin-top: 1px;
+}
+.edit-comment {
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 0 10px 5px 10px;
+}
+.edit-comment span {
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+.edit-comment-form {
+    width: 100%;
+}
+.edit-comment-form textarea {
+    width: 97%;
+    resize: vertical;
+}
+.edit-btn {
+    height: 20%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin: 0 10px 10px 10px;
+}
+.delete-comment-btn {
+    height: 20%;
+    cursor: pointer;
+    margin: 0 10px 10px 10px;
+    font-size: 1.7rem;
 }

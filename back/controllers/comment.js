@@ -80,11 +80,10 @@ exports.deleteComment = (req, res, next) => {
     const userId = decodedToken.userId;
     const isUserAdmin = decodedToken.admin;
     db.Comment.findOne({
-        attributes: ["id"],
         where: { id: req.params.commentId },
     })
         .then((commentFound) => {
-            if ((commentFound.userId === userId) | isUserAdmin) {
+            if (commentFound.userId === userId || isUserAdmin) {
                 if (commentFound) {
                     db.Comment.destroy({
                         where: { id: req.params.commentId },
@@ -134,7 +133,7 @@ exports.editComment = (req, res, next) => {
         where: { id: req.body.commentId },
     })
         .then((commentFound) => {
-            if ((commentFound.userId === userId) | isUserAdmin) {
+            if (commentFound.userId === userId || isUserAdmin) {
                 if (commentFound) {
                     db.Comment.update(commentObject, {
                         where: { id: req.body.commentId },

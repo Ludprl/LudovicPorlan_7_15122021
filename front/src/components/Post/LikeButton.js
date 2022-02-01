@@ -29,13 +29,17 @@ const LikeButton = ({ post }) => {
     }, [Uid, LikeArray]);
 
     return (
-        <div className="like-container" onClick={unlike}>
+        <>
             {liked ? (
-                <i className="fas fa-thumbs-up" alt="Ne plus aimer"></i>
+                <div className="like-container" onClick={unlike} id="liker">
+                    <i className="fas fa-thumbs-up" alt="Ne plus aimer"></i>
+                </div>
             ) : (
-                <i className="far fa-thumbs-up" onClick={like} alt="Aimer"></i>
+                <div className="like-container" onClick={like} id="liker">
+                    <i className="far fa-thumbs-up" alt="Aimer"></i>
+                </div>
             )}
-        </div>
+        </>
     );
 };
 

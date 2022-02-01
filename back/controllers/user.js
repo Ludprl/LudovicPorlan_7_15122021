@@ -5,7 +5,7 @@ const fs = require("fs");
 //récupérer tout les comptes utilisateur
 exports.getAllUsers = (req, res, next) => {
     db.User.findAll({
-        attributes: { exclude: ["password"] },
+        attributes: { exclude: ["password", "admin", "email"] },
         order: [["createdAt", "DESC"]],
     })
         .then((usersFound) => {
@@ -30,9 +30,9 @@ exports.getUserProfile = (req, res, next) => {
             "id",
             "lastName",
             "firstName",
+            "admin",
             "bio",
             "email",
-            "admin",
             "profileAvatar",
             "createdAt",
             "updatedAt",
@@ -134,49 +134,101 @@ exports.deleteAccount = (req, res, next) => {
     const userId = decodedToken.userId;
     const isUserAdmin = decodedToken.admin;
     const id = req.params.id;
-    if ((userId == id) | isUserAdmin) {
-        db.User.findOne({
-            where: { id: id },
-        }).then((user) => {
-            const filename = user.profileAvatar.split(
-                "/images/upload/avatars/"
-            )[1];
-            console.log(filename);
-
-            if (filename !== "icon-default-avatar.png") {
-                fs.unlink(`images/upload/avatars/${filename}`, () => {
-                    db.User.destroy({
-                        where: { id: id },
-                    })
-                        .then(() =>
-                            res.status(200).json({
-                                message:
-                                    "Votre compte a été supprimé avec succès !",
-                            })
-                        )
-                        .catch(() =>
-                            res.status(500).json({
-                                error: "Une erreur s'est produite pendant la suppression du compte, veuillez recommencer ultérieurement.",
-                            })
-                        );
-                });
-            } else {
-                db.User.destroy({
-                    where: { id: id },
-                })
-                    .then(() =>
-                        res.status(200).json({
-                            message:
-                                "Votre compte a été supprimé avec succès !",
-                        })
-                    )
-                    .catch(() =>
-                        res.status(500).json({
-                            error: "Une erreur s'est produite pendant la suppression du compte, veuillez recommencer ultérieurement.",
-                        })
-                    );
-            }
+    if (userId == id || isUserAdmin) {
+        // On s'occupe des likes
+        db.Like.destroy({
+            where: { userId: req.params.id },
         });
+        // On s'occupe des commentaires
+        db.Comment.destroy({
+            where: { userId: req.params.id },
+        });
+        // on s'occupe des posts de l'utilisateur.
+        db.Post.findAll({
+            where: { userId: req.params.id },
+        })
+            .then((post) => {
+                if (post) {
+                    for (let i = 0; i < post.length; i++) {
+                        console.log(["POST"], post[i].dataValues);
+                        // On s'occupe des likes
+                        db.Like.destroy({
+                            where: { postId: post[i].dataValues.id },
+                        });
+                        // On s'occupe des commentaires
+                        db.Comment.destroy({
+                            where: { postId: post[i].dataValues.id },
+                        });
+                        // on s'occupe du post en lui même.
+                        // Suppression des images de chaque post
+                        console.log(
+                            "[IMAGE POST]",
+                            post[i].dataValues.imagePost
+                        );
+
+                        if (post[i].imagePost !== null) {
+                            const postFilename = post[
+                                i
+                            ].dataValues.imagePost.split(
+                                "/images/upload/posts/"
+                            )[1];
+                            fs.unlink(
+                                `images/upload/posts/${postFilename}`,
+                                () => {
+                                    db.Post.destroy({
+                                        where: { id: post[i].dataValues.id },
+                                    });
+                                }
+                            );
+                        } else {
+                            db.Post.destroy({
+                                where: { id: post[i].dataValues.id },
+                            });
+                        }
+                    }
+                }
+            })
+            .then(() => {
+                // et enfin de l'utilisateur
+                db.User.findOne({
+                    where: { id: id },
+                }).then((user) => {
+                    const filename = user.profileAvatar.split(
+                        "/images/upload/avatars/"
+                    )[1];
+                    console.log("[AVATAR]", filename);
+
+                    if (filename !== "icon-default-avatar.png") {
+                        fs.unlink(`images/upload/avatars/${filename}`, () => {
+                            db.User.destroy({
+                                where: { id: id },
+                            })
+                                .then(() =>
+                                    res.status(200).json({
+                                        message:
+                                            "Votre compte a été supprimé avec succès !",
+                                    })
+                                )
+                                .catch(() =>
+                                    res.status(500).json({
+                                        error: "Une erreur s'est produite pendant la suppression du compte, veuillez recommencer ultérieurement.",
+                                    })
+                                );
+                        });
+                    } else {
+                        db.User.destroy({
+                            where: { id: id },
+                        })
+                            .then(() =>
+                                res.status(200).json({
+                                    message:
+                                        "Votre compte a été supprimé avec succès !",
+                                })
+                            )
+                            .catch((err) => console.log(err));
+                    }
+                });
+            });
     } else {
         res.status(403).json({
             error: "Cette opération est interdite",

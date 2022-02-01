@@ -72,7 +72,16 @@ const NewPostForm = () => {
                                     </div>
                                 </div>
                             </div>
-                            <p>{message}</p>
+                            <p>
+                                {message.split("\n").map((message, key) => {
+                                    return (
+                                        <span key={key}>
+                                            {message}
+                                            <br />
+                                        </span>
+                                    );
+                                })}
+                            </p>
                             <img src={postPicture} alt="" />
                         </li>
                     ) : null}
@@ -91,12 +100,12 @@ const NewPostForm = () => {
                         <div className="btn-send">
                             {message || postPicture ? (
                                 <button onClick={cancelPost}>
-                                    Annuler message
+                                    Annuler publication
                                 </button>
                             ) : null}
 
                             <button className="send" onClick={handlePost}>
-                                Envoyer
+                                Publier
                             </button>
                         </div>
                     </div>

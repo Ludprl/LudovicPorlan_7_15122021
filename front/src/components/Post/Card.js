@@ -16,6 +16,7 @@ const Card = ({ post }) => {
     const [showComments, setShowComments] = useState(false);
     const usersData = useSelector((state) => state.usersReducer);
     const userData = useSelector((state) => state.userReducer);
+    const postContent = post.content;
     const dispatch = useDispatch();
 
     const diffDateH = (
@@ -91,7 +92,18 @@ const Card = ({ post }) => {
                             )}
                         </div>
                     </div>
-                    {isUpdated === false && <p>{post.content}</p>}
+                    {isUpdated === false && (
+                        <p>
+                            {postContent.split("\n").map((postContent, key) => {
+                                return (
+                                    <span key={key}>
+                                        {postContent}
+                                        <br />
+                                    </span>
+                                );
+                            })}
+                        </p>
+                    )}
                     {isUpdated === true && (
                         <div className="updatePost">
                             <textarea

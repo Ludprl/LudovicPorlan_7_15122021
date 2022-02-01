@@ -10,7 +10,10 @@ const Logout = () => {
         <>
             <li onClick={removeToken}>
                 <p>
-                    <i className="logout fas fa-sign-out-alt"></i>
+                    <i
+                        className="logout fas fa-sign-out-alt"
+                        title="Se déconnecter"
+                    ></i>
                 </p>
             </li>
         </>
