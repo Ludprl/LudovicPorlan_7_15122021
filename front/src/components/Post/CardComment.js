@@ -28,12 +28,12 @@ const CardComment = ({ post }) => {
                 >
                     <textarea
                         name="text"
-                        placeholder="Du nouveau ?"
+                        placeholder="Laissez votre commentaire..."
                         onChange={(e) => setText(e.target.value)}
                         value={text}
                     />
 
-                    <input type="submit" />
+                    <button type="submit">Envoyer</button>
                 </form>
             </div>
             {post.Comments.map((comment) => {

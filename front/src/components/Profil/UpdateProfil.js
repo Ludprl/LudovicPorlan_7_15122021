@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateBio } from "../../actions/user.actions";
 import UploadImg from "./UploadImg";
+import axios from "axios";
+
 import "./Profil.css";
 
 const UpdateProfil = () => {
@@ -9,6 +11,24 @@ const UpdateProfil = () => {
     const [updateForm, setUpdateForm] = useState(false);
     const userData = useSelector((state) => state.userReducer);
     const dispatch = useDispatch();
+    const access_token = localStorage.getItem("userToken");
+
+    const handleDeleteAccount = async () => {
+        await axios({
+            method: "delete",
+            url: `${process.env.REACT_APP_API_URL}api/user/${userData.id}`,
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+            },
+        })
+            .then((res) => {
+                localStorage.removeItem("userToken");
+                window.location = "/";
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
 
     const handleUpdateBio = () => {
         dispatch(updateBio(userData.id, bio));
@@ -62,6 +82,22 @@ const UpdateProfil = () => {
                             <button onClick={handleUpdateBio}>Valider</button>
                         </>
                     )}
+                </div>
+                <div className="delete-account">
+                    <h3>Supprimer son compte</h3>
+
+                    <button
+                        onClick={() => {
+                            if (
+                                window.confirm(
+                                    "Êtes vous sûr(e)s de vouloir supprimer votre compte ? Toutes vos données seront effacèes."
+                                )
+                            )
+                                handleDeleteAccount();
+                        }}
+                    >
+                        Effacer mes données de Groupomania
+                    </button>
                 </div>
             </div>
         </>
