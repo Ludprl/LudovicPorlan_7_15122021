@@ -90,9 +90,6 @@ exports.modifyPost = (req, res, next) => {
     const decodedToken = jwt.verify(token, process.env.JWT_TOKEN);
     const userId = decodedToken.userId;
     const isUserAdmin = decodedToken.admin;
-    console.log("file", req.file);
-    console.log("content", req.body.content);
-    console.log("bodypost", req.body.post);
     const postObject = req.file
         ? {
               content: req.body.content,
@@ -101,8 +98,6 @@ exports.modifyPost = (req, res, next) => {
               )}/images/upload/posts/${req.file.filename}`,
           }
         : { ...req.body };
-    console.log("body", req.body);
-    console.log(req.params.postId);
     db.Post.findOne({
         where: { id: req.params.postId },
     })

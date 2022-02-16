@@ -61,7 +61,6 @@ exports.getAllComments = (req, res, next) => {
         .then((commentFound) => {
             if (commentFound) {
                 res.status(200).json(commentFound);
-                console.log(commentFound);
             } else {
                 res.status(401).json({ error: "Aucun commentaire trouvé !" });
             }
@@ -123,8 +122,6 @@ exports.editComment = (req, res, next) => {
     const decodedToken = jwt.verify(token, process.env.JWT_TOKEN);
     const userId = decodedToken.userId;
     const isUserAdmin = decodedToken.admin;
-    console.log(req.body.content);
-    console.log(req.params.postId);
     const commentObject = {
         content: req.body.content,
     };

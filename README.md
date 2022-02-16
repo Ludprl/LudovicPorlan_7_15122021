@@ -1,70 +1,84 @@
-# Getting Started with Create React App
+# Groupomania
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Social website for Groupomania.
 
-## Available Scripts
+## Tasks
 
-In the project directory, you can run:
+    - Back-end with Node and MySQL
+    - Front-end (React)
 
-### `npm start`
+## Installation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Clone this repository
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Back-end Installation
 
-### `npm test`
+From the back-end, you must have Mysql.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+     cd back
+```
 
-### `npm run build`
+1. Open a terminal and write:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+     npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. You should have a file "config.json" in the folder "config", where it is written:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
 
-### `npm run eject`
+    {
+    "development": {
+        "username": "root",
+        "password": "",
+        "database": "groupomania",
+        "host": "127.0.0.1",
+        "dialect": "mysql"
+    }
+    }
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Change the username and password with your configuration.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3. Now create the database in the terminal with:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+     npx sequelize-cli db:create
+     npx sequelize-cli db:migrate
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+3.1 (optionnal) If you want some data you can import in your databasse the file Si vous souhaitez ajouter des valeurs à votre base de données, vous pouvez importer le fichier groupomania.sql (in database/groupomania.sql):
 
-## Learn More
+```bash
+    use your habitual software
+    or with the SQL terminal replacing with your "user" and "password" write the commmand:
+            mysql -u user -p password groupomania_db < groupomania.sql
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+With this data you have acces at the account of toto@group.com (an user) and ocr@group.com (an admin) with the password GroupOcr01\*
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+4. To finish write:
 
-### Code Splitting
+```bash
+     npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Front-end Installation
 
-### Analyzing the Bundle Size
+From the front-end (port 3000), open a terminal and write:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```bash
+     npm install
+```
 
-### Making a Progressive Web App
+Then
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```bash
+     npm start
+```
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Enjoy

@@ -25,7 +25,6 @@ export const getPosts = (num) => {
             })
             .then((res) => {
                 const array = res.data.slice(0, num);
-                console.log(res.data);
                 dispatch({ type: GET_POSTS, payload: array });
             })
             .catch((err) => {

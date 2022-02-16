@@ -28,7 +28,6 @@ const EditDeleteComment = (comment, postId) => {
     useEffect(() => {
         if ((uid === comment.comment.userId) | userData.admin) {
             setIsAuthor(true);
-            console.log(comment);
         }
         return () => {};
     }, [uid, comment.comment.userId, comment, userData.admin]);

@@ -65,8 +65,6 @@ exports.likePost = (req, res, next) => {
                     userId: userId,
                 })
                     .then((response) => {
-                        console.log(postFound.likes);
-
                         db.Post.update(
                             {
                                 likes: postFound.likes + 1,

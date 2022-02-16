@@ -13,7 +13,6 @@ export const getUsers = () => {
                 },
             })
             .then((res) => {
-                console.log(res.data);
                 dispatch({ type: GET_USERS, payload: res.data });
             })
             .catch((err) => console.log(err));

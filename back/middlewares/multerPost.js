@@ -18,4 +18,18 @@ const storage = multer.diskStorage({
     },
 });
 
-module.exports = multer({ storage: storage }).single("file");
+const uploadFilter = function (req, file, cb) {
+    if (
+        file.mimetype !== "image/png" &&
+        file.mimetype !== "image/jpg" &&
+        file.mimetype !== "image/jpeg" &&
+        file.mimetype !== "image/gif"
+    ) {
+        cb(new Error("Fichier non autorisé"));
+    }
+    cb(null, true);
+};
+
+module.exports = multer({ storage: storage, fileFilter: uploadFilter }).single(
+    "file"
+);

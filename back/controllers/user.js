@@ -150,7 +150,6 @@ exports.deleteAccount = (req, res, next) => {
             .then((post) => {
                 if (post) {
                     for (let i = 0; i < post.length; i++) {
-                        console.log(["POST"], post[i].dataValues);
                         // On s'occupe des likes
                         db.Like.destroy({
                             where: { postId: post[i].dataValues.id },
@@ -161,10 +160,6 @@ exports.deleteAccount = (req, res, next) => {
                         });
                         // on s'occupe du post en lui même.
                         // Suppression des images de chaque post
-                        console.log(
-                            "[IMAGE POST]",
-                            post[i].dataValues.imagePost
-                        );
 
                         if (post[i].imagePost !== null) {
                             const postFilename = post[
@@ -196,7 +191,6 @@ exports.deleteAccount = (req, res, next) => {
                     const filename = user.profileAvatar.split(
                         "/images/upload/avatars/"
                     )[1];
-                    console.log("[AVATAR]", filename);
 
                     if (filename !== "icon-default-avatar.png") {
                         fs.unlink(`images/upload/avatars/${filename}`, () => {
