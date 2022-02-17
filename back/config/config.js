@@ -7,31 +7,19 @@ module.exports = {
         database: process.env.dbNameDev,
         host: process.env.dbHost,
         dialect: "mysql",
-        define: {
-            charset: "utf8",
-            dialectOptions: { collate: "utf8_general_ci" },
-        },
     },
     test: {
         username: process.env.dbUsername,
         password: process.env.dbPassword,
-        database: process.env.dbNameTest,
+        database: process.env.dbNameDev,
         host: process.env.dbHost,
         dialect: "mysql",
-        define: {
-            charset: "utf8",
-            dialectOptions: { collate: "utf8_general_ci" },
-        },
     },
     production: {
         username: process.env.dbUsername,
         password: process.env.dbPassword,
-        database: process.env.dbNameProd,
+        database: process.env.dbNameDev,
         host: process.env.dbHost,
         dialect: "mysql",
-        define: {
-            charset: "utf8",
-            dialectOptions: { collate: "utf8_general_ci" },
-        },
     },
 };

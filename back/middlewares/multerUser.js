@@ -18,6 +18,14 @@ const storage = multer.diskStorage({
 });
 
 const uploadFilter = function (req, file, cb) {
+    const name = file.originalname.split(" ").join("_");
+    const regex = new RegExp("%00");
+    const checkFileName = regex.test(name);
+
+    if (checkFileName) {
+        cb(new Error("Nom de fichier non conforme"));
+    }
+
     if (
         file.mimetype !== "image/png" &&
         file.mimetype !== "image/jpg" &&
