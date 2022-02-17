@@ -25,10 +25,10 @@ const SignUpForm = () => {
         if (password !== controlPassword || !terms.checked) {
             if (password !== controlPassword)
                 passwordConfirmError.innerHTML =
-                    "Les mots de passe ne correspondent pas";
+                    "<p>Les mots de passe ne correspondent pas</p>";
             if (!terms.checked)
                 termsError.innerHTML =
-                    "Veuillez valider les conditions générales";
+                    "<p>Veuillez valider les conditions générales</p>";
         } else {
             await axios({
                 method: "post",
@@ -45,7 +45,7 @@ const SignUpForm = () => {
                 })
                 .catch((err) => {
                     console.log(err);
-                    formError.innerHTML = err.response.data.error;
+                    formError.innerHTML = `<p>${err.response.data.error}</p>`;
                 });
         }
     };

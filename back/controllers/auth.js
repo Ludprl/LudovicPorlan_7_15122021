@@ -67,6 +67,7 @@ exports.signup = (req, res, next) => {
                             lastName: req.body.lastName,
                             firstName: req.body.firstName,
                             email: req.body.email,
+                            bio: "Parlez nous de vous...",
                             password: hash, //on récupère le mdp hashé de bcrypt
                             admin: 0,
                             profileAvatar: `${req.protocol}://${req.get(
@@ -82,7 +83,7 @@ exports.signup = (req, res, next) => {
                             )
                             .catch((error) =>
                                 res.status(400).json({
-                                    error: "Une erreur s'est produite pendant la création du compte, veuillez recommencer ultérieurement.",
+                                    error: "Cet utilisateur existe déjà !",
                                 })
                             );
                     })
