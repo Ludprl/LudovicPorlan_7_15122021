@@ -5,9 +5,17 @@
     margin-bottom: 15px;
     border: 1px solid #ced0d4;
     border-radius: 7px;
+    width: 100%;
 }
 .post-form .card-container {
     margin: 0 10px;
+}
+.post-form-container {
+    justify-content: center;
+    display: flex;
+}
+.post-form-container i {
+    font-size: 3rem;
 }
 .post-form textarea {
     font-family: poppins;
