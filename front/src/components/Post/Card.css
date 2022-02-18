@@ -325,7 +325,7 @@ span {
 .edit-comment {
     display: flex;
     flex-direction: row-reverse;
-    margin: 0 10px 5px 10px;
+    margin: 0 10px 5px 0px;
 }
 .edit-comment span {
     font-size: 1.1rem;

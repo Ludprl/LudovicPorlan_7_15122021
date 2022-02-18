@@ -78,7 +78,7 @@ const EditDeleteComment = (comment, postId) => {
                             name="text"
                             onChange={(e) => setText(e.target.value)}
                             defaultValue={comment.comment.content}
-                            cols="26"
+                            cols="28"
                             rows="3"
                         />
                         <input type="submit" value="Valider modifications" />
