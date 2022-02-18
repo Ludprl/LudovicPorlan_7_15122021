@@ -9,6 +9,7 @@ import { updatePost } from "../../actions/post.actions";
 import DeleteCard from "./DeleteCard";
 import CardComment from "./CardComment";
 import Linkify from "react-linkify";
+import TextareaAutosize from "react-textarea-autosize";
 
 const Card = ({ post }) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -118,7 +119,7 @@ const Card = ({ post }) => {
                     )}
                     {isUpdated === true && (
                         <div className="updatePost">
-                            <textarea
+                            <TextareaAutosize
                                 defaultValue={post.content}
                                 onChange={(e) => setTextUpdate(e.target.value)}
                             />

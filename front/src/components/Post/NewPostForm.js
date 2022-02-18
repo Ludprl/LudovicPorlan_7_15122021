@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addPost, getPosts } from "../../actions/post.actions";
 import { isEmpty } from "../Utils";
 import Linkify from "react-linkify";
+import TextareaAutosize from "react-textarea-autosize";
 
 const NewPostForm = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -46,7 +47,8 @@ const NewPostForm = () => {
                 <i className="fas fa-spinner fa-pulse"></i>
             ) : (
                 <div className="post-form">
-                    <textarea
+                    <TextareaAutosize
+                        className="autoExpand"
                         name="message"
                         id="message"
                         placeholder="Du nouveau ?"
@@ -67,7 +69,6 @@ const NewPostForm = () => {
                                             {userData.lastName +
                                                 " " +
                                                 userData.firstName}
-                                            ;
                                         </h3>
                                         <span>Il y a une minute</span>
                                     </div>

@@ -105,6 +105,7 @@ ul {
     border: 1px solid #ced0d4;
     border-radius: 7px;
 }
+
 .card-container p span {
     margin: 0;
 }
@@ -141,6 +142,9 @@ ul {
     padding: 0px 10px 0 10px;
     font-family: Poppins;
     width: auto;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
 }
 .thread-container {
     padding-top: 25px;

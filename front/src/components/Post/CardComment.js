@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addComment, getPosts } from "../../actions/post.actions";
 import { isEmpty } from "../Utils";
 import EditDeleteComment from "./EditDeleteComment";
+import TextareaAutosize from "react-textarea-autosize";
 
 const CardComment = ({ post }) => {
     const [text, setText] = useState("");
@@ -26,7 +27,7 @@ const CardComment = ({ post }) => {
                     onSubmit={handleComment}
                     className="comment-form"
                 >
-                    <textarea
+                    <TextareaAutosize
                         name="text"
                         placeholder="Laissez votre commentaire..."
                         onChange={(e) => setText(e.target.value)}

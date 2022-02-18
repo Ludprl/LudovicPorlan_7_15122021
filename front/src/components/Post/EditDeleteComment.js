@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteComment, editComment } from "../../actions/post.actions";
 import { UidContext } from "../AppContext";
+import TextareaAutosize from "react-textarea-autosize";
 
 const EditDeleteComment = (comment, postId) => {
     const userData = useSelector((state) => state.userReducer);
@@ -72,7 +73,7 @@ const EditDeleteComment = (comment, postId) => {
                         onSubmit={handleEdit}
                         className="edit-comment-form"
                     >
-                        <textarea
+                        <TextareaAutosize
                             type="text"
                             name="text"
                             onChange={(e) => setText(e.target.value)}
