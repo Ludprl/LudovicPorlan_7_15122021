@@ -37,6 +37,12 @@ const Card = ({ post }) => {
         !isEmpty(usersData[0]) && setIsLoading(false);
     }, [usersData]);
 
+    const linkPropreties = (href, text, key) => (
+        <a href={href} rel="noreferrer" key={key} target="_blank">
+            {text}
+        </a>
+    );
+
     return (
         <li className="card-container" key={post.id}>
             {isLoading ? (
@@ -94,11 +100,7 @@ const Card = ({ post }) => {
                         </div>
                     </div>
                     {isUpdated === false && (
-                        <Linkify
-                            properties={{
-                                target: "_blank",
-                            }}
-                        >
+                        <Linkify componentDecorator={linkPropreties}>
                             <p>
                                 {postContent
                                     .split("\n")
