@@ -18,6 +18,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-jwt": "^1.1.4",
+    "react-linkify": "^1.0.0-alpha",
     "react-moment": "^1.1.1",
     "react-native": "^0.66.4",
     "react-redux": "^7.2.6",

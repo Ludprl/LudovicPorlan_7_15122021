@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUser, uploadPicture } from "../../actions/user.actions";
+import { uploadPicture } from "../../actions/user.actions";
 import { getUsers } from "../../actions/users.actions";
 
 const UploadImg = () => {

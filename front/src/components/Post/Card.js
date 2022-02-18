@@ -8,6 +8,7 @@ import LikeButton from "./LikeButton";
 import { updatePost } from "../../actions/post.actions";
 import DeleteCard from "./DeleteCard";
 import CardComment from "./CardComment";
+import Linkify from "react-linkify";
 
 const Card = ({ post }) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -93,16 +94,25 @@ const Card = ({ post }) => {
                         </div>
                     </div>
                     {isUpdated === false && (
-                        <p>
-                            {postContent.split("\n").map((postContent, key) => {
-                                return (
-                                    <span key={key}>
-                                        {postContent}
-                                        <br />
-                                    </span>
-                                );
-                            })}
-                        </p>
+                        <Linkify
+                            properties={{
+                                target: "_blank",
+                            }}
+                        >
+                            <p>
+                                {postContent
+                                    .split("\n")
+                                    .map((postContent, key) => {
+                                        return (
+                                            <span key={key}>
+                                                {postContent}
+
+                                                <br />
+                                            </span>
+                                        );
+                                    })}
+                            </p>
+                        </Linkify>
                     )}
                     {isUpdated === true && (
                         <div className="updatePost">

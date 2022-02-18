@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addPost, getPosts } from "../../actions/post.actions";
 import { isEmpty } from "../Utils";
+import Linkify from "react-linkify";
 
 const NewPostForm = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -68,7 +69,7 @@ const NewPostForm = () => {
                                                 userData.firstName}
                                             ;
                                         </h3>
-                                        <span>Il y a 1 minute</span>
+                                        <span>Il y a une minute</span>
                                     </div>
                                 </div>
                             </div>
@@ -76,7 +77,14 @@ const NewPostForm = () => {
                                 {message.split("\n").map((message, key) => {
                                     return (
                                         <span key={key}>
-                                            {message}
+                                            <Linkify
+                                                properties={{
+                                                    target: "_blank",
+                                                }}
+                                            >
+                                                {message}
+                                            </Linkify>
+
                                             <br />
                                         </span>
                                     );
