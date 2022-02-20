@@ -56,6 +56,15 @@
     width: 50%;
 }
 
+.left-part form label {
+    cursor: pointer;
+    font-size: 1.2rem;
+    width: 70%;
+}
+.upload-pic p {
+    width: auto;
+}
+
 .left-part h3 {
     margin-top: 0;
 }
@@ -67,6 +76,7 @@
 }
 #file {
     width: 100%;
+    display: none;
 }
 .bio-update {
     border: 1px solid #fe7b0d;

@@ -108,7 +108,8 @@ exports.modifyUserProfile = (req, res, next) => {
                         where: { id: userId },
                     }).then(() =>
                         res.status(200).json({
-                            message: "Votre profil a été modifié avec succès !",
+                            message:
+                                "Votre profil a été modifié avec succès !!",
                         })
                     );
                 }
