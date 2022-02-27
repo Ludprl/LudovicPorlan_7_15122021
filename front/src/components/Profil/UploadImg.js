@@ -52,7 +52,6 @@ const UploadImg = () => {
                 }}
             />
             <p>{selectedFile}</p>
-            <i class="fa-regular fa-check"></i>
             <input type="submit" value="Envoyer" className="send-upload" />
         </form>
     );
